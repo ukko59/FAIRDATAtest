@@ -53,7 +53,7 @@ def wait_until_file_appears_in_metax(project, file_path, timeout=30):
         if metax.find_file_by_project_and_path(project, file_path):
             print('Found the file!')
             return True
-        time.sleep(1)
+        time.sleep(2)
         if i % 5 == 0 and i > 0:
             print('Still didnt find...')
     return False
@@ -79,7 +79,11 @@ def freeze_file(user, data):
     :return: status code, response data
     """
     r = requests.post('%s/freeze' % ida_api_url, json=data, auth=(user, ida_api_pass), verify=False)
-    return r.status_code, r.json()
+    try:
+        r_as_json = r.json()
+    except ValueError:
+        r_as_json = None
+    return r.status_code, r_as_json
 
 
 def unfreeze_file(user, data):
@@ -87,7 +91,12 @@ def unfreeze_file(user, data):
     :return: status code, response data
     """
     r = requests.post('%s/unfreeze' % ida_api_url, json=data, auth=(user, ida_api_pass), verify=False)
-    return r.status_code, r.json()
+    r_as_json = None
+    try:
+        r_as_json = r.json()
+    except ValueError:
+        r_as_json = None
+    return r.status_code, r_as_json
 
 
 def delete_file(user, data):

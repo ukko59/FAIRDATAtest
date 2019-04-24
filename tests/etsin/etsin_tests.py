@@ -25,8 +25,9 @@ class TestEtsinMetax(unittest.TestCase):
         data = get_minimal_dataset_template()
         status, cdata = metax.create_dataset(data)
 
-        self.assertIn(status, self.OK, "could not create dataset")
-        urn = cdata["identifier"]
+        self.assertIn(status, self.OK,
+                      "could not create dataset: " + str(cdata))
+        urn = cdata.json()["identifier"]
         time.sleep(10)
 
         etsin_status, etsin_data = etsin.view_dataset(urn)
@@ -34,12 +35,14 @@ class TestEtsinMetax(unittest.TestCase):
 
     def test_update_dataset(self):
         data = get_minimal_dataset_template()
-        status, dataset = metax.create_dataset(data)
-        self.assertIn(status, self.OK, "could not create dataset")
-
+        status, response = metax.create_dataset(data)
+        self.assertIn(status, self.OK,
+                      "could not create dataset: " + str(response))
+        dataset = response.json()
         dataset['research_dataset']['title']['en'] = 'title updated'
-        status, updated_data = metax.update_dataset(dataset['id'], dataset)
+        status, response = metax.update_dataset(dataset['id'], dataset)
         self.assertIn(status, self.OK, "Metax update failure")
+        updated_data = response.json()
         urn = updated_data["identifier"]
         etsin_status, etsin_data = etsin.view_dataset(urn)
         self.assertIn(etsin_status, self.OK, "Etsin failure")
@@ -47,13 +50,16 @@ class TestEtsinMetax(unittest.TestCase):
     def test_delete_dataset(self):
         data = get_minimal_dataset_template()
 
-        status, cdata = metax.create_dataset(data)
-        self.assertIn(status, self.OK, "could not create dataset")
+        status, response = metax.create_dataset(data)
+        self.assertIn(status, self.OK,
+                      "could not create dataset: " + str(response))
+        cdata = response.json()
         urn = cdata["identifier"]
 
         time.sleep(2)
-        status = metax.delete_dataset(cdata['id'])
-        self.assertIn(status, self.OK, "Metax dataset delete failure")
+        status, response = metax.delete_dataset(cdata['id'])
+        self.assertIn(status, self.OK,
+                      "Metax dataset delete failure: " + str(response))
 
         etsin_status, etsin_data = etsin.view_dataset(urn)
         # this assert makes no sense, since a deleted dataset will have a tombstone page anyway?

@@ -16,6 +16,10 @@ conf_vars = {
                 "USER": "",
                 "PASS": "",
             },
+            "PAS": {
+                "USER": "",
+                "PASS": ""
+            }
         }
     },
 
@@ -34,17 +38,29 @@ conf_vars = {
         # other required confs
         "HTTPD_USER": "apache",
         "ROOT_DIR": "/var/ida",
+        "PROJECT": "",
+        "PROJ_USER": "",
         "PROJ_USER_PASS": "test",
     },
 
     "PAS":  {
         "HOST": "",
+        "USER": "",
+        "PASS": "",
+    },
+
+    "PAS_UPLOAD":  {
+        "HOST": "",
         "USERS": {
-            "PAS": {
-                "USER": "",
-                "PASS": "",
+            "ADMIN": {
+                "USER": "admin",
+                "PASS": ""
             },
-        }
+            "USER": {
+                "USER": "integration_test_upload_user",
+            }
+        },
+        "PROJECT": "integration_test_upload_project"
     },
 
     "QVAIN":  {

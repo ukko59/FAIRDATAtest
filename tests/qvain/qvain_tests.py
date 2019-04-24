@@ -26,7 +26,7 @@ class TestQvainMetax(unittest.TestCase):
         self.dataset = qvain.make_dataset_from(fairdata_dataset)
         self.dataset_id = ""
         self.test_title = "Danska jo"
-        
+
     def test_01_CreateDataset(self):
         status, res = qvain.create_dataset(self.dataset)
         # first check if we're authenticated, because if we're not, all tests will fail
@@ -41,11 +41,11 @@ class TestQvainMetax(unittest.TestCase):
         dataset_id = TestQvainMetax.dataset_id
         if not dataset_id:
            raise Exception("can't find dataset_id of previously created dataset")
-           
+
         updated_dataset = self.dataset
         updated_dataset['id'] = dataset_id
         updated_dataset['dataset']['title']['dk'] = self.test_title
-        
+
         status, res = qvain.update_dataset(dataset_id, self.dataset)
         self.assertEqual(status, 204)
 
@@ -53,7 +53,7 @@ class TestQvainMetax(unittest.TestCase):
         dataset_id = TestQvainMetax.dataset_id
         if not dataset_id:
            raise Exception("can't find dataset_id of previously created dataset")
-           
+
         status, res = qvain.get_dataset(dataset_id)
         self.assertEqual(status, 200)
         self.assertIn('dataset', res, msg='expected to find dataset key in api result')
@@ -64,7 +64,7 @@ class TestQvainMetax(unittest.TestCase):
         dataset_id = TestQvainMetax.dataset_id
         if not dataset_id:
            raise Exception("can't find dataset_id of previously created dataset")
-           
+
         status, res = qvain.publish_dataset(dataset_id)
         self.assertIn(status, [200, 201])
         self.assertIn('extid', res)

@@ -4,3 +4,4 @@ ipdb==0.11
 pexpect==4.4.0
 requests==2.18.4
 responses==0.8.1
+parameterized
