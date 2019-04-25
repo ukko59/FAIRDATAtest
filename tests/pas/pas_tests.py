@@ -130,7 +130,22 @@ class TestPASMetax(unittest.TestCase):
         self.assertIn(status, self.OK, 'Get dataset fails: ' + str(response))
         self.assertEqual(80, response.json()['passtate'],
                          'Preserving dataset fails: ' + str(response))
-        print("Dataset preserved")
+
+        print("Waiting 10 minutes for preservation process to complete")
+        for _i in range(60):
+            status, response = get_dataset(self.dataset_id)
+            self.assertIn(status,
+                          self.OK, 'Get dataset fails: ' + str(response)
+                          )
+            passtate = response.json()['passtate']
+            if passtate == 120 or passtate == 130:
+                break
+            time.sleep(10)
+            print('.', end='', flush=True)
+        self.assertEqual(
+            120, passtate, 'Dataset details: passtateDescription=' +
+            response.json()['passtateDescription'] + ', passtateReasonDesc=' +
+            response.json()['passtateReasonDesc'])
 
     def _freeze_files(self):
         data = {
