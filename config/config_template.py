@@ -17,7 +17,7 @@ conf_vars = {
                 "PASS": "",
             },
             "PAS": {
-                "USER": "",
+                "USER": "tpas",
                 "PASS": ""
             }
         }
@@ -38,15 +38,18 @@ conf_vars = {
         # other required confs
         "HTTPD_USER": "apache",
         "ROOT_DIR": "/var/ida",
-        "PROJECT": "",
-        "PROJ_USER": "",
         "PROJ_USER_PASS": "test",
     },
 
     "PAS":  {
         "HOST": "",
-        "USER": "",
-        "PASS": "",
+        "USERS": {
+            # Basic authentication user accessing admin-rest-api
+            "ADMIN-API": {
+                "USER": "admin",
+                "PASS": ""
+            }
+        }
     },
 
     "PAS_UPLOAD":  {
@@ -55,12 +58,8 @@ conf_vars = {
             "ADMIN": {
                 "USER": "admin",
                 "PASS": ""
-            },
-            "USER": {
-                "USER": "integration_test_upload_user",
             }
-        },
-        "PROJECT": "integration_test_upload_project"
+        }
     },
 
     "QVAIN":  {

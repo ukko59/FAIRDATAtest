@@ -9,6 +9,11 @@ import tempfile
 
 requests.packages.urllib3.disable_warnings()
 
+project = 'pas_test_project'
+project_user = 'pas_test_user'
+upload_user = 'upload_user'
+upload_user_pass = None
+
 try:
     HOST = conf_vars['PAS']['HOST']
     UPLOAD_HOST = conf_vars['PAS_UPLOAD']['HOST']
@@ -17,17 +22,12 @@ try:
     UPLOAD_FILES_URL = 'https://%s/filestorage/api/v1/files' % UPLOAD_HOST
     UPLOAD_METADATA_URL = ('https://%s/filestorage/api/v1/metadata' %
                            UPLOAD_HOST)
-    admin_auth = (conf_vars['PAS']['USER'],
-                  conf_vars['PAS']['PASS'])
+    admin_auth = (conf_vars['PAS']['USERS']['ADMIN-API']['USER'],
+                  conf_vars['PAS']['USERS']['ADMIN-API']['PASS'])
     metax_user = conf_vars['METAX']['USERS']['PAS']['USER']
     metax_pwd = conf_vars['METAX']['USERS']['PAS']['PASS']
-    project = conf_vars['IDA']['PROJECT']
-    project_user = conf_vars['IDA']['PROJ_USER']
     upload_admin = conf_vars['PAS_UPLOAD']['USERS']['ADMIN']['USER']
     upload_admin_pwd = conf_vars['PAS_UPLOAD']['USERS']['ADMIN']['PASS']
-    upload_user = conf_vars['PAS_UPLOAD']['USERS']['USER']['USER']
-    upload_user_pass = conf_vars['PAS_UPLOAD']['USERS']['USER']['USER']
-    upload_project = conf_vars['PAS_UPLOAD']['PROJECT']
 except Exception as e:
     print('Note: PAS not configured: ' + str(e))
 
@@ -197,7 +197,7 @@ def create_upload_user():
                         auth=(upload_admin, upload_admin_pwd), verify=False)
     if r.status_code == 200 or r.status_code == 404:
         r = requests.post(
-            '%s/%s/%s' % (UPLOAD_ADMIN_URL, upload_user, upload_project),
+            '%s/%s/%s' % (UPLOAD_ADMIN_URL, upload_user, project),
             auth=(upload_admin, upload_admin_pwd), verify=False)
         if r.status_code == 200:
             global upload_user_pass
